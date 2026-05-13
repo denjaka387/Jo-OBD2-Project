@@ -3,7 +3,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-    # Kita turunkan ke 22.04 karena lebih stabil untuk Buildozer
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -19,16 +18,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Buildozer and Dependencies
+      - name: Install Essential Tools
         run: |
           sudo apt update
-          sudo apt install -y build-essential git python3-dev ffmpeg libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev libswscale-dev libavformat-dev libavcodec-dev zlib1g-dev libgstreamer1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good
+          # Kita hanya pasang yang benar-benar wajib untuk Buildozer
+          sudo apt install -y build-essential git python3-dev zip unzip zlib1g-dev libffi-dev libssl-dev
           pip install --user --upgrade buildozer cython virtualenv
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # Kita pakai 'yes' untuk otomatis terima lisensi Android
+          # Kita pakai perintah 'yes' agar otomatis melewati pertanyaan lisensi
           yes | buildozer android debug
           
       - name: Upload APK
