@@ -1,0 +1,3 @@
+title=Jo Smart OBD2
+author=Denjaka
+orientation=portrait
